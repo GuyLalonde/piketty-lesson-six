@@ -1,0 +1,64 @@
+# The Gapminder website contains over 500 data sets with information about
+# the world's population. Your task is to continue the investigation you did at the
+# end of Problem Set 3 or you can start fresh and choose a different
+# data set from Gapminder.
+
+# If you’re feeling adventurous or want to try some data munging see if you can
+# find a data set or scrape one from the web.
+
+# In your investigation, examine pairs of variable and create 2-5 plots that make
+# use of the techniques from Lesson 4.
+
+# You can find a link to the Gapminder website in the Instructor Notes.
+
+# Once you've completed your investigation, create a post in the discussions that includes:
+#       1. the variable(s) you investigated, your observations, and any summary statistics
+#       2. snippets of code that created the plots
+#       3. links to the images of your plots
+
+# Copy and paste all of the code that you used for
+# your investigation, and submit it when you are ready.
+
+
+loading Quandl Piketty dataset.
+
+```{r}
+library(ggplot2)
+setwd("/Users/guylalonde/Desktop/EDA/piketty_dataset")
+ts9_3 <- read.csv("PIKETTY-TS9_3.csv", sep = ',')
+names(ts9_3)
+head(ts9_3)
+ts9_3$date <- as.Date(ts9_3$Yaer)
+ts9_3$year <- format(ts9_3$date, "%Y")
+head(ts9_3)
+min(ts9_3$year)
+```
+
+
+gathering and dropping columns
+
+```{r}
+library(tidyr)
+gathered_ts9_3 <- gather(ts9_3, country, percent_income, 2:15, na.rm = TRUE)
+head(ts9_3)
+head(gathered_ts9_3)
+keeps <- c('year', 'country', 'percent_income')
+gathered_trimmed_ts9_3 <- gathered_ts9_3[keeps]
+head(gathered_trimmed_ts9_3)
+```
+
+```{r}
+?separate
+vars <- c("Country", "percentile")
+separate(data =ts9_3_B, col = country, into = vars, sep = regexpr(pattern ='\\W', 'hello..world'))
+separate(data =ts9_3_B, col = country, into = vars, sep = '\\W')
+head(ts9_3_B)
+```
+
+```{r}
+library(stringr)
+gathered_trimmed_ts9_3$split <- str_match(gathered_trimmed_ts9_3$country, "^(.*)[.][.](.*)$") [,-1]
+head(gathered_trimmed_ts9_3)
+gathered_trimmed_ts9_3
+```
+
